@@ -1,0 +1,13 @@
+{{$dir := .Name}}
+<html>
+	<head>
+		<title>FileTundra: {{$dir}}</title>
+	</head>
+	<body>
+        <table>
+{{range .Files}}
+<tr><td><img src="{{.Image}}"></td><td><a href="{{.Path}}">{{.Name}}</a></td></tr>
+{{end}}
+        </table>
+	</body>
+</html>
