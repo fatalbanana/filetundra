@@ -21,10 +21,10 @@ import (
 
 var (
 	audioMetaMimeMap = map[types.Type]struct{}{
-		matchers.TypeFlac: struct{}{},
-		matchers.TypeM4a:  struct{}{},
-		matchers.TypeMp3:  struct{}{},
-		matchers.TypeOgg:  struct{}{},
+		matchers.TypeFlac: {},
+		matchers.TypeM4a:  {},
+		matchers.TypeMp3:  {},
+		matchers.TypeOgg:  {},
 	}
 
 	errUnhandledAudioFormat = errors.New("unrecognised audio format")
