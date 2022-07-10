@@ -106,5 +106,5 @@ func run(blugeDir string) bool {
 
 func init() {
 	sigChan = make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGUSR1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 }
