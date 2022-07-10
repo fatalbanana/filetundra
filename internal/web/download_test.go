@@ -18,7 +18,7 @@ func TestDownload(t *testing.T) {
 	defer ts.Close()
 
 	client := ts.Client()
-	req, err := http.NewRequest(http.MethodGet, ts.URL+"/download/tone.mp3", nil)
+	req, err := http.NewRequest(http.MethodGet, ts.URL+"/download/aaa/bbb", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -31,7 +31,7 @@ func TestDownload(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	f, err := os.Open(filepath.Join(env.Env.Root, "tone.mp3"))
+	f, err := os.Open(filepath.Join(env.Env.Root, "aaa", "bbb"))
 	if err != nil {
 		t.Fatal(err)
 	}
