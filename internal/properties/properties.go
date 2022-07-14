@@ -1,11 +1,13 @@
 package properties
 
 var (
-	AudioAlbum  = "audio.album"
-	AudioArtist = "audio.artist"
-	AudioTitle  = "audio.title"
-	Basename    = "basename"
-	Dirname     = "dirname"
-	Filename    = "filename"
-	MimeType    = "mimetype"
+	ArchiveFilename = "archive.filename"
+	AudioAlbum      = "audio.album"
+	AudioArtist     = "audio.artist"
+	AudioTitle      = "audio.title"
+	BareBasename    = "basename"
+	Extname         = "extname"
+	Dirname         = "dirname"
+	Filename        = "filename"
+	MimeType        = "mimetype"
 )

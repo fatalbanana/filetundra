@@ -23,8 +23,10 @@ import (
 var browseTemplate string
 
 type DirectoryListing struct {
-	Name  string
-	Files []DirectoryListingFile
+	Autoback bool
+	Back     string
+	Name     string
+	Files    []DirectoryListingFile
 }
 
 type DirectoryListingFile struct {
@@ -50,6 +52,11 @@ func pathToDirectoryListing(ctx context.Context, searchPath string, virtualPath 
 	res.Name = virtualPath
 	res.Files = make([]DirectoryListingFile, 0)
 
+	if virtualPath != "/" && virtualPath != "" {
+		virtualParentDir, _ := path.Split(virtualPath)
+		res.Back = path.Join("/browse", virtualParentDir)
+	}
+
 	var next *search.DocumentMatch
 	var fi idx.FileInfo
 	next, err = searchResults.Next()
@@ -62,10 +69,11 @@ func pathToDirectoryListing(ctx context.Context, searchPath string, virtualPath 
 		if fi.MimeType == "inode/directory" {
 			basePath = "/browse"
 		}
+		properBasename := fi.BareBasename + fi.Extname
 		fileRes := DirectoryListingFile{
-			Name:  fi.Basename,
+			Name:  properBasename,
 			Image: getImage(fi.MimeType),
-			Path:  path.Join(basePath, virtualPath, fi.Basename),
+			Path:  path.Join(basePath, virtualPath, properBasename),
 		}
 		res.Files = append(res.Files, fileRes)
 		next, err = searchResults.Next()
@@ -74,7 +82,7 @@ func pathToDirectoryListing(ctx context.Context, searchPath string, virtualPath 
 }
 
 func browseHandler(w http.ResponseWriter, r *http.Request) {
-	virtualPath := strings.TrimPrefix(r.URL.Path, "/browse")
+	virtualPath := path.Clean(strings.TrimPrefix(r.URL.Path, "/browse") + "/")
 	searchPath := filepath.Join(env.Env.Root, virtualPath)
 
 	t, err := template.New("browse").Parse(browseTemplate)
@@ -105,9 +113,42 @@ func browseHandler(w http.ResponseWriter, r *http.Request) {
 
 func getImage(mType string) string {
 	switch mType {
+	case "application/gzip":
+	case "application/vnd.debian.binary-package":
+	case "application/vnd.rar":
+	case "application/x-7z-compressed":
+	case "application/x-rpm":
+	case "application/x-tar":
+	case "application/x-unix-archive":
+	case "application/x-xz":
+	case "application/zip":
+	case "application/zstd":
+		return "/static/icons/archive-unindexed.svg"
+
 	case "inode/directory":
 		return "/static/icons/directory.svg"
+
+	case "application/msword":
+	case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+		return "/static/icons/document.svg"
+
+	case "application/x-executable":
+	case "application/x-mach-binary":
+	case "application/vnd.microsoft.portable-executable":
+		return "/static/icons/executable.svg"
+
+	case "application/pdf":
+		return "/static/icons/pdf.svg"
+
+	case "application/vnd.ms-powerpoint":
+	case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+		return "/static/icons/presentation.svg"
+
+	case "application/vnd.ms-excel":
+	case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+		return "/static/icons/spreadsheet.svg"
 	}
+
 	majorVersion := strings.Split(mType, "/")[0]
 	switch majorVersion {
 	case "image":

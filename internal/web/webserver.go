@@ -17,9 +17,10 @@ var (
 
 func RunWebserver() error {
 	router := mux.NewRouter()
-	router.PathPrefix("/browse").Handler(http.HandlerFunc(browseHandler))
-	router.PathPrefix("/download").Handler(http.HandlerFunc(downloadHandler))
-	router.PathPrefix("/static").Handler(http.HandlerFunc(staticHandler))
+	router.PathPrefix("/browse").HandlerFunc(browseHandler)
+	router.PathPrefix("/download").HandlerFunc(downloadHandler)
+	router.HandleFunc("/search", searchHandler)
+	router.PathPrefix("/static").HandlerFunc(staticHandler)
 	Server = &http.Server{
 		Addr:              net.JoinHostPort(env.Env.HTTPAddress, fmt.Sprintf("%d", env.Env.HTTPPort)),
 		Handler:           router,

@@ -2,8 +2,21 @@
 <html>
 	<head>
 		<title>FileTundra: {{$dir}}</title>
+		<link rel="stylesheet" href="/static/css/tundra.css">
 	</head>
 	<body>
+	<form method="post" action="/search">
+{{if .Autoback}}
+<a href="javascript:history.back()"><img src="/static/icons/back.svg" class="bar"></a>
+{{else if .Back}}
+<a href="{{.Back}}"><img src="/static/icons/back.svg" class="bar"></a>
+{{end}}
+		<label for="search"><img src="/static/icons/find.svg" class="bar"></label>
+		<input type="text" id="search" name="search">
+	</form>
+{{if not .Files}}
+<h3>Nothing found</h3>
+{{end}}
         <table>
 {{range .Files}}
 <tr><td><img src="{{.Image}}"></td><td><a href="{{.Path}}">{{.Name}}</a></td></tr>

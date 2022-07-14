@@ -14,8 +14,10 @@ func documentMatchToFileInfo(reader *bluge.Reader, match *search.DocumentMatch) 
 		switch field {
 		case "_id":
 			fi.Filename = string(value)
-		case properties.Basename:
-			fi.Basename = string(value)
+		case properties.BareBasename:
+			fi.BareBasename = string(value)
+		case properties.Extname:
+			fi.Extname = string(value)
 		case properties.MimeType:
 			fi.MimeType = string(value)
 		case properties.AudioAlbum:
