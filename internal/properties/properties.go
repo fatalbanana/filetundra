@@ -10,4 +10,6 @@ var (
 	Dirname         = "dirname"
 	Filename        = "filename"
 	MimeType        = "mimetype"
+	ModifiedTime    = "modtime"
+	Size            = "size"
 )

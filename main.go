@@ -75,6 +75,16 @@ func run(blugeDir string) bool {
 			return false
 		}
 		log.Logger.Info("created initial index")
+	} else {
+		go func() {
+			log.Logger.Info("updating index")
+			err = idx.Update()
+			if err != nil {
+				log.Logger.Error("failed to update index", zap.Error(err))
+				return
+			}
+			log.Logger.Info("index updated")
+		}()
 	}
 
 	go func() {

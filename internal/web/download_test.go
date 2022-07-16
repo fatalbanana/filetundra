@@ -62,4 +62,27 @@ func TestDownload(t *testing.T) {
 		t.Fatalf("unexpected HTTP status: got %d expected %d",
 			resp.StatusCode, http.StatusNotFound)
 	}
+
+	// Test range
+	req, err = http.NewRequest(http.MethodGet, ts.URL+"/download/tone.mp3", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Range", "bytes=78-89")
+	resp, err = client.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if resp.StatusCode != http.StatusPartialContent {
+		t.Fatalf("unexpected HTTP status: got %d expected %d",
+			resp.StatusCode, http.StatusPartialContent)
+	}
+	responseBytes, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	responseString := string(responseBytes)
+	if responseString != "Andrew Lewis" {
+		t.Fatalf("Unexpected body: %s", responseString)
+	}
 }

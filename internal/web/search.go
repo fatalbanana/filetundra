@@ -71,7 +71,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	var fi idx.FileInfo
 	next, err = searchResults.Next()
 	for err == nil && next != nil {
-		fi, err = documentMatchToFileInfo(reader, next)
+		fi, err = idx.DocumentMatchToFileInfo(reader, next)
 		if err != nil {
 			log.Logger.Error("match to fileinfo error", zap.Error(err))
 			http.Error(w, "", http.StatusInternalServerError)

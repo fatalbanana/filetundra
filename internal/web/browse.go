@@ -62,7 +62,7 @@ func pathToDirectoryListing(ctx context.Context, searchPath string, virtualPath 
 	var fi idx.FileInfo
 	next, err = searchResults.Next()
 	for err == nil && next != nil {
-		fi, err = documentMatchToFileInfo(reader, next)
+		fi, err = idx.DocumentMatchToFileInfo(reader, next)
 		if err != nil {
 			return res, err
 		}
