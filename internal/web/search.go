@@ -44,11 +44,14 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer reader.Close()
 
-	basenameSearch := bluge.NewMatchQuery(r.Form.Get("search")).SetField(properties.BareBasename).SetAnalyzer(idx.BlugeAnalyzer)
-	dirnameSearch := bluge.NewMatchQuery(r.Form.Get("search")).SetField(properties.Dirname)
-	archiveSearch := bluge.NewMatchQuery(r.Form.Get("search")).SetField(properties.ArchiveFilename)
+	searchQ := r.Form.Get("search")
+	basenameSearch := bluge.NewMatchQuery(searchQ).SetField(properties.BareBasename).SetAnalyzer(idx.BlugeAnalyzer)
+	fuzzyBasenameSearch := bluge.NewFuzzyQuery(searchQ).SetField(properties.BareBasename)
+	dirnameSearch := bluge.NewFuzzyQuery(searchQ).SetField(properties.Dirname)
+	archiveSearch := bluge.NewFuzzyQuery(searchQ).SetField(properties.ArchiveFilename)
 	query := bluge.NewBooleanQuery()
 	query.AddShould(basenameSearch)
+	query.AddShould(fuzzyBasenameSearch)
 	query.AddShould(dirnameSearch)
 	query.AddShould(archiveSearch)
 
@@ -61,7 +64,8 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res := DirectoryListing{
-		Autoback: true,
+		Autoback:    true,
+		SearchValue: searchQ,
 	}
 	var next *search.DocumentMatch
 	var fi idx.FileInfo

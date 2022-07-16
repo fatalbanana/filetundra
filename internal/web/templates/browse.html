@@ -12,7 +12,7 @@
 <a href="{{.Back}}"><img src="/static/icons/back.svg" class="bar"></a>
 {{end}}
 		<label for="search"><img src="/static/icons/find.svg" class="bar"></label>
-		<input type="text" id="search" name="search">
+		<input type="text" id="search" name="search" value="{{.SearchValue}}">
 	</form>
 {{if not .Files}}
 <h3>Nothing found</h3>

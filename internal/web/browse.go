@@ -23,10 +23,11 @@ import (
 var browseTemplate string
 
 type DirectoryListing struct {
-	Autoback bool
-	Back     string
-	Name     string
-	Files    []DirectoryListingFile
+	Autoback    bool
+	Back        string
+	Name        string
+	Files       []DirectoryListingFile
+	SearchValue string
 }
 
 type DirectoryListingFile struct {
